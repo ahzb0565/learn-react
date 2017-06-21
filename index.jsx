@@ -73,5 +73,49 @@ function Clocks(){
     </ul>;
 }
 
+// A function based component
+function Toggle1(){
+    function handleClick(e){
+        e.preventDefault();
+        console.log('Toggle1 clicked');
+        setResult(true);
+    }
+    return <button onClick={handleClick}>Toggle1</button>;
+}
+
+// A class based component
+class Toggle2 extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {isToggleOn: false};
+        this.handleClick = this.handleClick.bind(this);  //Bind to this
+    }
+
+    handleClick(){
+        this.setState(prevState => ({isToggleOn: !prevState.isToggleOn}));
+    }
+
+    render(){
+        console.log('toggle2 clicked, result is '+ this.state.isToggleOn);
+        setResult(this.state.isToggleOn);
+        return <button onClick={this.handleClick}>Toggle2</button>;
+    }
+}
+
+// Generate toggles
+function Toggles(){
+    return <ul>
+        <li><Toggle1 /><small>This button rendered by a function component</small></li>
+        <li><Toggle2 /><small>This button rendered by a class component</small></li>
+    </ul>
+}
+
+// Show result
+function setResult(result){
+    var result = Boolean(result).toString();
+    ReactDOM.render(<p>Result is {result}</p>, document.getElementById('result'));
+}
+
 ReactDOM.render(<Components />, document.getElementById('Components'));
 ReactDOM.render(<Clocks />, document.getElementById('Clocks'));
+ReactDOM.render(<Toggles />, document.getElementById('toggles'));
