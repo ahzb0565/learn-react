@@ -20,22 +20,58 @@ setInterval(tick, 1000);
 
 // A simple function component
 function FuncComponent(props){
-    return <li>Hi {props.name}, This element created by function component</li>
+    return <p>Hi {props.name}, This element created by function component</p>
 }
 
 // A simple class component
 class ClassComponent extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {className: 'Class Component'}
+    }
     render(){
-        return <li>Hello {this.props.name}, This is a class componet</li>;
+        return <p>Hello {this.props.name}, This is a class componet, named {this.state.className}</p>;
     }
 }
 
 // Composing the components together
 function Components(){
     return <ul>
-        <FuncComponent name="Bob" />
-        <ClassComponent name="Bob" />
+        <li><FuncComponent name="Bob" /></li>
+        <li><ClassComponent name="Bob" /></li>
+    </ul>;
+}
+
+// Clock rendered by components
+class ClassClock extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {date: new Date()};
+    }
+
+    tick(){
+        this.setState((prevState, props) => {return {date: new Date()};});
+    }
+
+    componentDidMount(){
+        this.timerID = setInterval(()=>this.tick(), 1000);
+    }
+
+    componentWillUnmount(){
+        clearInterval(this.timerID);
+    }
+
+    render(){
+        return <spam>now is {this.state.date.toLocaleTimeString()}</spam>;
+    }
+}
+
+// Generage clocks div
+function Clocks(){
+    return <ul>
+        <li>Clock created by class: <ClassClock /></li>
     </ul>;
 }
 
 ReactDOM.render(<Components />, document.getElementById('Components'));
+ReactDOM.render(<Clocks />, document.getElementById('Clocks'));
