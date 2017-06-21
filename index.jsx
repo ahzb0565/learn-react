@@ -18,11 +18,24 @@ function tick(){
 
 setInterval(tick, 1000);
 
-// A simple prop component
-function Welcome(prop){
-    return <p>This element created by props object. prop.name = {prop.name}</p>
+// A simple function component
+function FuncComponent(props){
+    return <li>Hi {props.name}, This element created by function component</li>
 }
 
-const propElement = <Welcome name='Sara'/>  // User defined component
+// A simple class component
+class ClassComponent extends React.Component {
+    render(){
+        return <li>Hello {this.props.name}, This is a class componet</li>;
+    }
+}
 
-ReactDOM.render(propElement, document.getElementById('simpleProp'));
+// Composing the components together
+function Components(){
+    return <ul>
+        <FuncComponent name="Bob" />
+        <ClassComponent name="Bob" />
+    </ul>;
+}
+
+ReactDOM.render(<Components />, document.getElementById('Components'));
