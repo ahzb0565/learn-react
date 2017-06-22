@@ -93,11 +93,11 @@ class Toggle2 extends React.Component {
 
     handleClick(){
         this.setState(prevState => ({isToggleOn: !prevState.isToggleOn}));
+        setResult(this.state.isToggleOn);
+        console.log('toggle2 clicked, result is '+ this.state.isToggleOn);
     }
 
     render(){
-        console.log('toggle2 clicked, result is '+ this.state.isToggleOn);
-        setResult(this.state.isToggleOn);
         return <button onClick={this.handleClick}>Toggle2</button>;
     }
 }
@@ -116,6 +116,58 @@ function setResult(result){
     ReactDOM.render(<p>Result is {result}</p>, document.getElementById('result'));
 }
 
+
+function LoginButton(props){
+    return <button onClick={props.onClick}>Login</button>;
+}
+function LogoutButton(props){
+    return <button onClick={props.onClick}>Logout</button>;
+}
+function UserGreeting(props){
+    return <p>Hi, welcome back</p>;
+}
+function GuestGreetiing(){
+    return <p>Hi stranger, please login</p>;
+}
+function Greeting(props){
+    if(props.isLoggedIn){
+        return <UserGreeting />;
+    }else{
+        return <GuestGreetiing />;
+    }
+}
+
+class LoginControl extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {isLoggedIn: false};
+        this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
+    }
+
+    login(){
+        this.setState({isLoggedIn: true});
+    }
+    logout(){
+        this.setState({isLoggedIn: false});
+    }
+
+    render(){
+        const loggedIn = this.state.isLoggedIn;
+        let button = null;
+        if(loggedIn){
+            button = <LogoutButton onClick={this.logout} />;
+        }else{
+            button = <LoginButton onClick={this.login} />;
+        }
+        return (
+            <div><Greeting isLoggedIn={loggedIn}/>{button}</div>
+        );
+    }
+}
+
+
 ReactDOM.render(<Components />, document.getElementById('Components'));
 ReactDOM.render(<Clocks />, document.getElementById('Clocks'));
 ReactDOM.render(<Toggles />, document.getElementById('toggles'));
+ReactDOM.render(<LoginControl />, document.getElementById('loginControl'));
