@@ -234,7 +234,98 @@ class NameForm extends React.Component{
     }
 }
 
-// select
+// lifting state up
+function BoilingVerdict(props){
+    if(props.celsius >= 100){
+        return <p>The water would boil.</p>;
+    }else{
+        return <p>The water will not boil</p>;
+    };
+}
+
+const scaleName = {
+    c: 'Celsius',
+    f: 'Fahrenheit'
+};
+
+
+function toCelsius(fehrenheit){
+    return (fehrenheit - 32) * 5/9;
+}
+
+function toFahrenheit(celsius){
+    return (celsius * 9 / 5) + 32;
+}
+
+function tryConvert(temperature, convert){
+    const input = parseFloat(temperature);
+    if (Number.isNaN(temperature)){
+        return '';
+    }
+
+    const output = convert(input);
+    const rounded = Math.round(output * 1000) / 1000;
+    return rounded.toString();
+}
+
+class TemperatureInput extends React.Component{
+    constructor(props){
+        super(props);
+        // this.state = {temperature: ''};
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event){
+        // this.setState({temperature: event.target.value});
+        this.props.onTemperatureChange(event.target.value);
+    }
+
+    render(){
+        //const temperature = this.state.temperature;
+        const temperature = this.props.temperature;
+        const scale = this.props.scale;
+        return (
+            <fieldset>
+                <legend>Enter temperature in {scaleName[scale]}</legend>
+                <input value={temperature} onChange={this.handleChange} />
+            </fieldset>
+        )
+    }
+}
+
+
+class Caculator extends React.Component{
+    constructor(props){
+        super(props);
+        this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+        this.handleFehrenheitChange = this.handleFehrenheitChange.bind(this);
+        this.state = {temperature: '', scale: 'c'};
+    }
+
+    handleCelsiusChange(temperature){
+        this.setState({temperature: temperature, scale: 'c'});
+    }
+
+    handleFehrenheitChange(temperature){
+        this.setState({temperature: temperature, scale: 'f'});
+    }
+
+    render(){
+        const scale = this.state.scale;
+        const temperature = this.state.temperature;
+        const celsius = scale === 'f' ? tryConvert(temperature, toCelsius): temperature;
+        const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+        console.log('temperature is: ' + celsius + 'c or '+ fahrenheit + 'f');
+
+        return (
+            <div>
+                <TemperatureInput scale="c" temperature={celsius} onTemperatureChange={this.handleCelsiusChange} />
+                <TemperatureInput scale="f" temperature={fahrenheit} onTemperatureChange={this.handleFehrenheitChange} />
+                <BoilingVerdict celsius={parseFloat(celsius)} />
+            </div>
+        );
+    }
+}
 
 
 ReactDOM.render(<Components />, document.getElementById('Components'));
@@ -243,3 +334,4 @@ ReactDOM.render(<Toggles />, document.getElementById('toggles'));
 ReactDOM.render(<LoginControl />, document.getElementById('loginControl'));
 ReactDOM.render(<NumberList numbers={[1,2,3,4,5]} />, document.getElementById('numberList'));
 ReactDOM.render(<NameForm />, document.getElementById('nameform'));
+ReactDOM.render(<Caculator />, document.getElementById('boilingVerdict'));
