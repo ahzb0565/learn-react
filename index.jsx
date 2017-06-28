@@ -178,8 +178,68 @@ function NumberList(props){
     return <ul>{listItems}</ul>;
 }
 
+// forms
+class NameForm extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            value: '',
+            text: '',
+            selection: 'grapefruit',
+        };
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.handleSelectionChange = this.handleSelectionChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleNameChange(event){
+        this.setState({value: event.target.value});
+    }
+
+    handleTextChange(event){
+        this.setState({text: event.target.value});
+    }
+
+    handleSelectionChange(event){
+        this.setState({selection: event.target.value});
+    }
+
+
+    handleSubmit(event){
+        alert('A name was submited, name: ' + this.state.value + ', text: '+ this.state.text + ', selection: ' + this.state.selection) ;
+        event.preventDefault();
+    }
+
+    render(){
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <label>
+                    Name: <input type="text" value={this.state.value} onChange={this.handleNameChange}/><br/>
+                </label>
+                <label>
+                    Text: <textarea value={this.state.text} onChange={this.handleTextChange} /><br/>
+                </label>
+                <label>
+                    Selection: <select value={this.state.selection} onChange={this.handleSelectionChange}>
+                        <option value="grapefruit">Grapefruit</option>
+                        <option value="lime">Lime</option>
+                        <option value="coconut">Cocunut</option>
+                        <option value="mango">Mango</option>
+                    </select>
+                </label>
+                <input type="submit" value="Submit" />
+            </form>
+        );
+    }
+}
+
+// select
+
+
 ReactDOM.render(<Components />, document.getElementById('Components'));
 ReactDOM.render(<Clocks />, document.getElementById('Clocks'));
 ReactDOM.render(<Toggles />, document.getElementById('toggles'));
 ReactDOM.render(<LoginControl />, document.getElementById('loginControl'));
 ReactDOM.render(<NumberList numbers={[1,2,3,4,5]} />, document.getElementById('numberList'));
+ReactDOM.render(<NameForm />, document.getElementById('nameform'));
